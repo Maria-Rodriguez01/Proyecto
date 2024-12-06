@@ -5,24 +5,24 @@ import java.util.Scanner;
 
 public class GhostGame {
 
-    private static final int tablerotam = 6; // Tamaño del tablero
-    private static final char casilla = '-'; // Casilla vacía
-    private final char[][] tablero; // Tablero de juego
-    public String currentPlayer; // Jugador actual
-    private String opponent; // Jugador oponente
-    private int[] ghostsbcap ; // Fantasmas buenos capturados
-    private int[] ghostsmcap; // Fantasmas malos capturados
-    private final String dificultad = "Normal"; // Dificultad (por defecto)
-    private static final String modoJuego = "Aleatorio"; // Modo de juego (por defecto)
-    private final Scanner entrada = new Scanner(System.in); // Entrada estándar
+    private static final int tablerotam = 6; 
+    private static final char casilla = '-'; 
+    private final char[][] tablero; 
+    public String currentPlayer; 
+    private String opponent; 
+    private int[] ghostsbcap ; 
+    private int[] ghostsmcap; 
+    private int[] ghostsbcap2 ; 
+    private int[] ghostsmcap2; 
+    private final String dificultad = "Normal"; 
+    private static final String modoJuego = "Aleatorio"; 
+    private final Scanner entrada = new Scanner(System.in); 
 
-    // Constructor: Inicializar el tablero
     public GhostGame() {
         this.tablero = new char[tablerotam][tablerotam];
         initializeBoard();
     }
 
-    // Inicializar el tablero con casillas vacías
     private void initializeBoard() {
         for (int i = 0; i < tablerotam; i++) {
             for (int j = 0; j < tablerotam; j++) {
@@ -33,18 +33,18 @@ public class GhostGame {
 
         public void printBoard() {
     System.out.println("\nEstado del Tablero:");
-    System.out.print("   "); // Espaciado inicial para las columnas
+    System.out.print("   "); 
     for (int col = 0; col < tablerotam; col++) {
-        System.out.print(col + " "); // Etiquetas de columnas
+        System.out.print(col + " "); 
     }
     System.out.println();
 
     for (int row = 0; row < tablerotam; row++) {
-        System.out.print(row + " |"); // Etiqueta de fila
+        System.out.print(row + " |"); 
         for (int col = 0; col < tablerotam; col++) {
-            System.out.print(tablero[row][col] + " "); // Contenido de cada celda
+            System.out.print(tablero[row][col] + " "); 
         }
-        System.out.println("|"); // Cierre de la fila
+        System.out.println("|"); 
     }
     System.out.println();
 }
@@ -62,7 +62,7 @@ public class GhostGame {
    public void placeGhosts(String player, boolean isPlayerOne) {
     int buenos = 0, malos = 0, trampas = 0;
 
-    // Determinar cantidad de fantasmas según la dificultad
+    
     switch (dificultad) {
         case "Normal":
             buenos = 4;
@@ -87,7 +87,7 @@ public class GhostGame {
 
     System.out.println("Colocando fantasmas para: " + player);
      if (modoJuego.equals("Manual")) {
-        // Modo manual: permitir al jugador colocar fantasmas
+        
         for (int i = 0; i < buenos; i++) {
             manualPlacement(isPlayerOne, 'B', "fantasma bueno");
         }
@@ -142,7 +142,7 @@ public class GhostGame {
         System.out.print("Ingresa la fila y columna para el " + ghostName + " (ejemplo: 1 2): ");
         int row = entrada.nextInt();
         int col = entrada.nextInt();
-        entrada.nextLine(); // Consumir la nueva línea
+        entrada.nextLine(); 
 
         if (isValidPlacement(row, col, isPlayerOne)) {
             // Asignar el tipo de fantasma
@@ -159,7 +159,7 @@ public class GhostGame {
             } else if(ghostType=='P'){
                 tablero[row][col] = isPlayerOne ? 'T' : 'P';
             }
-            break;// Salir del bucle después de colocar el fantasma
+            break;
         } else {
             System.out.println("Posición no válida. Intenta de nuevo.");
         }
@@ -180,15 +180,7 @@ public class GhostGame {
         return isPlayerOne ? row < 2 : row >= 4;
     }
 
-    private boolean isValidPlacement2(int row, int col, boolean isPlayerOne) {
-        if (row < 0 || row >= tablerotam || col < 0 || col >= tablerotam) {
-            return false;
-        }
-        if (tablero[row][col] != casilla) {
-            return false;
-        }
-        return isPlayerOne ? row < 2 : row >= 4;
-    }
+    
 
   public boolean moveGhost(int startX, int startY, int endX, int endY) {
     if (!isValidMove(startX, startY, endX, endY)) {
@@ -205,22 +197,20 @@ public class GhostGame {
         return false;
     }
 
-    // Verificar si el destino tiene un fantasma propio
     if ((currentPlayer.equals(player1) && (target == 'B' || target == 'M' || target == 'T')) ||
         (currentPlayer.equals(player2) && (target == 'G' || target == 'E' || target == 'P'))) {
         System.out.println("No puedes capturar tus propios fantasmas.");
         return false;
     }
 
-    // Capturar fantasmas del oponente
     if (target == 'G') {
         System.out.println(currentPlayer + " capturó un fantasma bueno.");
-        if (currentPlayer.equals(player1)) ghostsbcap[1]++;
-        else ghostsbcap[0]++;
+        if (currentPlayer.equals(player1)) ghostsbcap[0]++;
+        else ghostsbcap[1]++;
     } else if (target == 'E') {
         System.out.println(currentPlayer + " capturó un fantasma malo.");
-        if (currentPlayer.equals(player1)) ghostsmcap[1]++;
-        else ghostsmcap[0]++;
+        if (currentPlayer.equals(player1)) ghostsmcap[0]++;
+        else ghostsmcap[1]++;
     }
     if (target == 'B') {
         System.out.println(currentPlayer + " capturó un fantasma bueno.");
@@ -229,20 +219,19 @@ public class GhostGame {
     } else if (target == 'M') {
         System.out.println(currentPlayer + " capturó un fantasma malo.");
         if (currentPlayer.equals(player2)) ghostsmcap[1]++;
-        else ghostsmcap[0]++;
+        else ghostsmcap2[0]++;
     }
 
 
-    // Mover el fantasma actual a la nueva posición
     tablero[endX][endY] = ghost;
     tablero[startX][startY] = casilla;
 
-    // Verificar victoria después del movimiento
+    
     if (checkVictory()) {
-        return true; // Detener el juego si hay un ganador
+        return true; 
     }
 
-    // Cambiar turno al oponente
+    
     switchTurn();
     return true;
 }
@@ -272,7 +261,6 @@ public class GhostGame {
    
     public boolean checkVictory() {
 
-    // Caso 1: Capturar todos los fantasmas buenos del oponente
     if (ghostsbcap[0] == 4) {
         System.out.println("¡" + player1 + " gana porque capturó todos los fantasmas buenos de " + player2 + "!");
         return true;
@@ -281,7 +269,6 @@ public class GhostGame {
         return true;
     }
 
-    // Caso 2: Perder todos los fantasmas malos propios
     if (ghostsmcap[0] == 4) {
         System.out.println("¡" + player2 + " gana porque " + player1 + " perdió todos sus fantasmas malos!");
         return true;
@@ -290,12 +277,12 @@ public class GhostGame {
         return true;
     }
 
-    // Caso 3: Llevar un fantasma bueno a la salida del oponente
+    
     for (int i = 0; i < tablerotam; i++) {
-        if (tablero[tablerotam - 1][i] == 'B') { // Fantasma bueno del Jugador 1 en la salida de Jugador 2
+        if (tablero[tablerotam - 1][i] == 'B') { 
             System.out.println("¡" + player1 + " gana llevando un fantasma bueno a la salida de " + player2 + "!");
             return true;
-        } else if (tablero[0][i] == 'G') { // Fantasma bueno del Jugador 2 en la salida de Jugador 1
+        } else if (tablero[0][i] == 'G') { 
             System.out.println("¡" + player2 + " gana llevando un fantasma bueno a la salida de " + player1 + "!");
             return true;
         }
